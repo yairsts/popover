@@ -20,6 +20,7 @@ class PopoverItem extends StatefulWidget {
   final double? arrowDxOffset;
   final double? arrowDyOffset;
   final double? contentDyOffset;
+  final Offset? popOffset;
 
   const PopoverItem({
     required this.child,
@@ -35,6 +36,7 @@ class PopoverItem extends StatefulWidget {
     this.arrowDxOffset,
     this.arrowDyOffset,
     this.contentDyOffset,
+    this.popOffset,
     Key? key,
   }) : super(key: key);
 
@@ -97,18 +99,10 @@ class _PopoverItemState extends State<PopoverItem> {
         maxHeight: Utils().screenHeight / 2,
         maxWidth: Utils().screenHeight / 2,
       ).copyWith(
-        minWidth: widget.constraints!.minWidth.isFinite
-            ? widget.constraints!.minWidth
-            : null,
-        minHeight: widget.constraints!.minHeight.isFinite
-            ? widget.constraints!.minHeight
-            : null,
-        maxWidth: widget.constraints!.maxWidth.isFinite
-            ? widget.constraints!.maxWidth
-            : null,
-        maxHeight: widget.constraints!.maxHeight.isFinite
-            ? widget.constraints!.maxHeight
-            : null,
+        minWidth: widget.constraints!.minWidth.isFinite ? widget.constraints!.minWidth : null,
+        minHeight: widget.constraints!.minHeight.isFinite ? widget.constraints!.minHeight : null,
+        maxWidth: widget.constraints!.maxWidth.isFinite ? widget.constraints!.maxWidth : null,
+        maxHeight: widget.constraints!.maxHeight.isFinite ? widget.constraints!.maxHeight : null,
       );
     } else {
       _constraints = BoxConstraints(
@@ -116,8 +110,7 @@ class _PopoverItemState extends State<PopoverItem> {
         maxWidth: Utils().screenHeight / 2,
       );
     }
-    if (widget.direction == PopoverDirection.top ||
-        widget.direction == PopoverDirection.bottom) {
+    if (widget.direction == PopoverDirection.top || widget.direction == PopoverDirection.bottom) {
       constraints = _constraints.copyWith(
         maxHeight: _constraints.maxHeight + widget.arrowHeight!,
         maxWidth: _constraints.maxWidth,
@@ -131,7 +124,8 @@ class _PopoverItemState extends State<PopoverItem> {
   }
 
   void _configureRect() {
-    offset = BuildContextExtension.getWidgetLocalToGlobal(widget.context);
+    // ignore: lines_longer_than_80_chars
+    offset = widget.popOffset != null ? Offset(widget.popOffset!.dx, widget.popOffset!.dy) : BuildContextExtension.getWidgetLocalToGlobal(widget.context);
     bounds = BuildContextExtension.getWidgetBounds(widget.context);
     attachRect = Rect.fromLTWH(
       offset.dx + (widget.arrowDxOffset ?? 0.0),

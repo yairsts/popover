@@ -72,15 +72,14 @@ Future<T?> showPopover<T extends Object?>({
   Color barrierColor = const Color(0x80000000),
   Duration transitionDuration = const Duration(milliseconds: 200),
   double radius = 8,
-  List<BoxShadow> shadow = const [
-    BoxShadow(color: Color(0x1F000000), blurRadius: 5)
-  ],
+  List<BoxShadow> shadow = const [BoxShadow(color: Color(0x1F000000), blurRadius: 5)],
   double arrowWidth = 24,
   double arrowHeight = 12,
   double arrowDxOffset = 0,
   double arrowDyOffset = 0,
   double contentDyOffset = 0,
   bool barrierDismissible = true,
+  Offset? offset,
   double? width,
   double? height,
   VoidCallback? onPop,
@@ -89,10 +88,7 @@ Future<T?> showPopover<T extends Object?>({
   String? barrierLabel,
   Key? key,
 }) {
-  constraints = (width != null || height != null)
-      ? constraints?.tighten(width: width, height: height) ??
-          BoxConstraints.tightFor(width: width, height: height)
-      : constraints;
+  constraints = (width != null || height != null) ? constraints?.tighten(width: width, height: height) ?? BoxConstraints.tightFor(width: width, height: height) : constraints;
 
   return Navigator.of(context, rootNavigator: true).push<T>(
     RawDialogRoute<T>(
@@ -100,8 +96,7 @@ Future<T?> showPopover<T extends Object?>({
         return Builder(builder: (_) => const SizedBox.shrink());
       },
       barrierDismissible: barrierDismissible,
-      barrierLabel: barrierLabel ??=
-          MaterialLocalizations.of(context).modalBarrierDismissLabel,
+      barrierLabel: barrierLabel ??= MaterialLocalizations.of(context).modalBarrierDismissLabel,
       barrierColor: barrierColor,
       transitionDuration: transitionDuration,
       settings: routeSettings,
@@ -131,6 +126,7 @@ Future<T?> showPopover<T extends Object?>({
               arrowDxOffset: arrowDxOffset,
               arrowDyOffset: arrowDyOffset,
               contentDyOffset: contentDyOffset,
+              popOffset: offset,
               key: key,
             ),
           ),
